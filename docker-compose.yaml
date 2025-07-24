@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: erp_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  service:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/erp_db?schema=public
+    command: sh -c "npx prisma migrate deploy && npm run start"
+
+volumes:
+  pgdata:
