@@ -1,9 +1,12 @@
 {
   "name": "customers-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "Dieser Microservice verwaltet Business-Kunden und stellt eine REST-API bereit. Er basiert auf Node.js, Express und Prisma ORM mit einer PostgreSQL-Datenbank. Die Bereitstellung kann lokal oder via Docker erfolgen.",
   "main": "index.js",
   "scripts": {
+    "dev": "ts-node-dev src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,11 +17,21 @@
     "@prisma/client": "^6.12.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
-    "express": "^5.1.0",
-    "prisma": "^6.12.0"
+    "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "@types/node": "^24.1.0",
-    "ts-node-dev": "^2.0.0"
-  }
+    "prisma": "^6.12.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DPlauder/meisterPlan_businessCustomers_Service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DPlauder/meisterPlan_businessCustomers_Service/issues"
+  },
+  "homepage": "https://github.com/DPlauder/meisterPlan_businessCustomers_Service#readme"
 }
