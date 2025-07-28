@@ -4,8 +4,6 @@ export const createBusinessCustomer = (data: any) => {
   return prisma.businessCustomer.create({ data });
 };
 
-export const getAllBusinessCustomers = (id: string) => {
-  return prisma.businessCustomer.findUnique({
-    where: { id },
-  });
+export const getAllBusinessCustomers = () => {
+  return prisma.businessCustomer.findMany();
 };

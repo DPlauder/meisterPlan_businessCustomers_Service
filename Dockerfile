@@ -7,8 +7,12 @@ RUN npm install
 
 COPY . .
 
-RUN npx prisma generate   
+# Prisma client generieren
+RUN npx prisma generate
 
+# Typescript kompilieren
 RUN npm run build
 
-CMD ["node", "dist/server.js"]
+# Starte nur das, was `docker-compose` vorgibt
+CMD ["sh", "-c", "npm run start"]
+

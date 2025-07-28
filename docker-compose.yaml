@@ -6,22 +6,30 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: Dominik2109
       POSTGRES_DB: customers
-    volumes:
-      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   service:
     build: .
     depends_on:
       - db
+    environment:
+      DATABASE_URL: postgresql://postgres:Dominik2109@db:5432/customers
     ports:
       - "3001:3001"
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/customers?schema=public
-    command: sh -c "npm run start"
+    command: >
+      sh -c "npx prisma generate &&
+         if [ ! -d prisma/migrations ] || [ -z \"$(ls -A prisma/migrations)\" ]; then
+           npx prisma migrate dev --name init;
+         else
+           npx prisma migrate deploy;
+         fi &&
+         npm run build &&
+         npm run start"
 
 volumes:
   pgdata:

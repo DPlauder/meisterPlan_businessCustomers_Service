@@ -4,13 +4,7 @@ import * as BusinessCustomerController from "../controllers/businessCustomer.con
 
 const router = express.Router();
 
-router.get(
-  "/business-customers",
-  BusinessCustomerController.getAllBusinessCustomers
-);
-router.post(
-  "/business-customers",
-  BusinessCustomerController.createBusinessCustomer
-);
+router.get("/", BusinessCustomerController.getAllBusinessCustomers);
+router.post("/", BusinessCustomerController.createBusinessCustomer);
 
 export default router;

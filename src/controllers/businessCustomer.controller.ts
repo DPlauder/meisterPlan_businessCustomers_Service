@@ -15,7 +15,8 @@ export const getAllBusinessCustomers = async (
   res: Response
 ): Promise<void> => {
   const businessCustomer =
-    await BusinessCustomerService.getAllBusinessCustomers(req.params.id);
+    await BusinessCustomerService.getAllBusinessCustomers();
+  console.log("Business Customer:", businessCustomer);
   if (!businessCustomer) {
     res.status(404).send("Business customer not found");
     return;
