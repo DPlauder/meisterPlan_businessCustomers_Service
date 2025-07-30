@@ -2,111 +2,174 @@
 
 Dieser Microservice verwaltet Business-Kunden und stellt eine REST-API bereit. Er basiert auf Node.js, Express und Prisma ORM mit einer PostgreSQL-Datenbank. Die Bereitstellung kann lokal oder via Docker erfolgen.
 
+---
+
 ## Features
 
-- Anlegen und Abrufen von Business-Kunden
+- Anlegen, Abrufen, Aktualisieren und Löschen von Business-Kunden
 - Anbindung an PostgreSQL über Prisma
-- Einfache Erweiterbarkeit und Docker-Support
+- REST-API mit Express
+- Docker-Support für einfache Bereitstellung
+
+---
 
 ## Projektstruktur
 
 ```
 .
 ├── prisma/
-│   └── schema.prisma         # Datenbankschema
+│   └── schema.prisma         # Datenbankschema für Prisma
 ├── src/
 │   ├── app.ts                # Express-App
 │   ├── server.ts             # Server-Startpunkt
+│   ├── config/
+│   │   └── env.ts            # Umgebungsvariablen
 │   ├── controllers/
 │   │   └── businessCustomer.controller.ts
+│   ├── db/
+│   │   └── client.ts         # Prisma-Client-Initialisierung
+│   ├── middlewares/
+│   │   └── error.middleware.ts
+│   ├── models/
+│   │   └── businessCustomer.model.ts
 │   ├── routes/
 │   │   └── businessCustomer.routes.ts
 │   ├── services/
 │   │   └── businessCustomer.service.ts
-│   └── db/
-│       └── client.ts         # Prisma-Client
+│   └── validators/
+│       └── businessCustomer.validator.ts
 ├── .env                      # Umgebungsvariablen
 ├── Dockerfile                # Docker-Buildfile
-├── docker-compose.yml        # Docker-Compose Setup
+├── docker-compose.yaml       # Docker-Compose Setup
 └── README.md
 ```
 
+---
+
 ## Setup & Entwicklung
 
-1. **Repository klonen**
+### 1. Repository klonen
 
-   ```sh
-   git clone <repo-url>
-   cd customers-service
-   ```
+```sh
+git clone <repo-url>
+cd customers-service
+```
 
-2. **Abhängigkeiten installieren**
+### 2. Abhängigkeiten installieren
 
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+```
 
-3. **Umgebungsvariablen anpassen**  
-   Die Datei `.env` enthält die Datenbankverbindung (z.B. `DATABASE_URL`).
+### 3. Umgebungsvariablen anpassen
 
-4. **Prisma Client generieren**
+Passe die Datei `.env` an deine Umgebung an. Beispiel:
 
-   ```sh
-   npx prisma generate
-   ```
+```
+DATABASE_URL="postgresql://postgres:deinPasswort@localhost:5432/customers?schema=public"
+PORT=3001
+CORS_ORIGIN=http://localhost:5173
+```
 
-5. **Migration durchführen**
+### 4. Prisma Client generieren
 
-   ```sh
-   npx prisma migrate dev --name init
-   ```
+```sh
+npx prisma generate
+```
 
-6. **Server starten**
-   ```sh
-   npm run dev
-   ```
+### 5. Migration durchführen
+
+```sh
+npx prisma migrate dev --name init
+```
+
+### 6. Server starten (Entwicklung)
+
+```sh
+npm run dev
+```
+
+---
 
 ## Docker-Nutzung
 
-1. **Docker-Container starten**
+### 1. Container starten
 
-   ```sh
-   docker-compose up --build
-   ```
+```sh
+docker-compose up --build
+```
 
-2. **Migration im Container ausführen**
-   ```sh
-   docker-compose exec app npx prisma migrate deploy
-   ```
+### 2. Migration im Container ausführen (optional)
+
+```sh
+docker-compose exec service npx prisma migrate deploy
+```
+
+---
 
 ## API Endpunkte
 
-### POST `/api/customers/business-customers`
+### GET `/api/business-customers`
+
+Gibt alle Business-Kunden zurück.
+
+### POST `/api/business-customers`
 
 Legt einen neuen Business-Kunden an.
 
 **Beispiel:**
 
 ```sh
-curl -X POST http://localhost:3001/api/customers/business-customers \
+curl -X POST http://localhost:3001/api/business-customers \
   -H "Content-Type: application/json" \
   -d '{"name":"Test GmbH","email":"info@test.de"}'
 ```
 
-### GET `/api/customers/business-customers/:id`
+### GET `/api/business-customers/:id`
 
 Gibt einen Business-Kunden anhand der ID zurück.
 
-**Beispiel:**
+### PUT `/api/business-customers/:id`
 
-```sh
-curl http://localhost:3001/api/customers/business-customers/123
-```
+Aktualisiert einen Business-Kunden.
+
+### DELETE `/api/business-customers/:id`
+
+Löscht einen Business-Kunden.
+
+---
 
 ## Datenbankmodell
 
-Das Datenbankschema befindet sich in `prisma/schema.prisma`.  
-Die Verbindung wird über die Umgebungsvariable `DATABASE_URL` gesteuert.
+Das Datenbankschema befindet sich in [`prisma/schema.prisma`](prisma/schema.prisma):
+
+```prisma
+model BusinessCustomer {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  phone       String?
+  website     String?
+  address     String?
+  city        String?
+  postalCode  String?
+  country     String?
+  taxNumber   String?
+  createdAt   DateTime @default(now())
+}
+```
+
+---
+
+## Entwicklungshinweise
+
+- Die Datenbankverbindung wird über die Umgebungsvariable `DATABASE_URL` gesteuert.
+- Der Prisma Client wird in [`src/db/client.ts`](src/db/client.ts) initialisiert.
+- Die Business-Logik befindet sich im Service-Layer ([`src/services/businessCustomer.service.ts`](src/services/businessCustomer.service.ts)).
+- Die API-Routen sind in [`src/routes/businessCustomer.routes.ts`](src/routes/businessCustomer.routes.ts) definiert.
+- Fehlerbehandlung und Validierung können über Middleware und Validatoren erweitert werden.
+
+---
 
 ## Lizenz
 
