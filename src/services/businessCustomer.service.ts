@@ -20,7 +20,7 @@ export const updateBusinessCustomer = (id: string, data: any) => {
 };
 export const deleteBusinessCustomer = (id: string) => {
   console.log("Deleting business customer with ID:", id);
-  //return prisma.businessCustomer.delete({
-  //where: { id },
-  //});
+  return prisma.businessCustomer.delete({
+    where: { id },
+  });
 };

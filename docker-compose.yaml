@@ -12,9 +12,12 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
 
   service:
     build: .
+    container_name: business-customer-service
     depends_on:
       - db
     environment:
@@ -30,6 +33,13 @@ services:
          fi &&
          npm run build &&
          npm run start"
+    networks:
+      - backend
+
 
 volumes:
   pgdata:
+
+networks:
+  backend:
+    driver: bridge

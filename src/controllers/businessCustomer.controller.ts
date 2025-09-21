@@ -55,5 +55,7 @@ export const deleteBusinessCustomer = async (
 ): Promise<void> => {
   const { id } = req.params;
   await BusinessCustomerService.deleteBusinessCustomer(id);
-  res.status(204).send();
+  res
+    .status(200)
+    .json({ success: true, message: "Business customer deleted successfully" });
 };
