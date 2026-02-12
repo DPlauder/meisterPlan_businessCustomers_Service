@@ -14,12 +14,18 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   service:
     build: .
     container_name: business-customer-service
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:Dominik2109@db:5432/customers
     ports:
@@ -35,7 +41,6 @@ services:
          npm run start"
     networks:
       - backend
-
 
 volumes:
   pgdata:
