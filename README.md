@@ -139,6 +139,24 @@ Build: npm ci && npm run build
 Start: npm run prisma:migrate:deploy && npm run start
 ```
 
+### 5. Troubleshooting (Render)
+
+Wenn im Runtime-Log ein Fehler wie
+`Can't reach database server at localhost:5432`
+erscheint, ist `DATABASE_URL` im Web Service nicht korrekt gesetzt.
+
+Prüfe in Render:
+
+1. **Web Service → Environment**
+2. `DATABASE_URL` muss vorhanden sein (nicht leer)
+3. Wert idealerweise aus der Render-Postgres-DB referenzieren
+4. Danach **Manual Deploy → Clear build cache & deploy** ausführen
+
+Zusätzlich prüfen:
+
+- Postgres-Instanz ist `available`
+- Start Command ist `npm run prisma:migrate:deploy && npm run start`
+
 ---
 
 ## API Endpunkte
