@@ -42,7 +42,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllBusinessCustomers = exports.createBusinessCustomer = void 0;
+exports.deleteBusinessCustomer = exports.updateBusinessCustomer = exports.getBusinessCustomerById = exports.getAllBusinessCustomers = exports.createBusinessCustomer = void 0;
 const BusinessCustomerService = __importStar(require("../services/businessCustomer.service"));
 const createBusinessCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const businessCustomer = yield BusinessCustomerService.createBusinessCustomer(req.body);
@@ -59,3 +59,31 @@ const getAllBusinessCustomers = (req, res) => __awaiter(void 0, void 0, void 0, 
     res.status(200).json(businessCustomer);
 });
 exports.getAllBusinessCustomers = getAllBusinessCustomers;
+const getBusinessCustomerById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const businessCustomer = yield BusinessCustomerService.getBusinessCustomerById(id);
+    if (!businessCustomer) {
+        res.status(404).send("Business customer not found");
+        return;
+    }
+    res.status(200).json(businessCustomer);
+});
+exports.getBusinessCustomerById = getBusinessCustomerById;
+const updateBusinessCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const updatedBusinessCustomer = yield BusinessCustomerService.updateBusinessCustomer(id, req.body);
+    if (!updatedBusinessCustomer) {
+        res.status(404).send("Business customer not found");
+        return;
+    }
+    res.status(200).json(updatedBusinessCustomer);
+});
+exports.updateBusinessCustomer = updateBusinessCustomer;
+const deleteBusinessCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    yield BusinessCustomerService.deleteBusinessCustomer(id);
+    res
+        .status(200)
+        .json({ success: true, message: "Business customer deleted successfully" });
+});
+exports.deleteBusinessCustomer = deleteBusinessCustomer;

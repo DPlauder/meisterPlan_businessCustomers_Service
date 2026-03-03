@@ -107,6 +107,40 @@ docker-compose exec service npx prisma migrate deploy
 
 ---
 
+## Deployment auf Render.com
+
+Dieser Service kann direkt über ein Git-Repository auf Render deployed werden.
+
+### 1. Voraussetzungen
+
+- Repository in GitHub/GitLab/Bitbucket
+- Datei `render.yaml` im Projekt-Root (ist enthalten)
+
+### 2. Render Blueprint deployen
+
+1. In Render: **New +** → **Blueprint**
+2. Repository auswählen
+3. Render erkennt `render.yaml` und erstellt:
+
+- Web Service `customers-service`
+- PostgreSQL `customers-db`
+
+### 3. Wichtige Details
+
+- `DATABASE_URL` wird automatisch aus der Render-Postgres-Instanz gesetzt.
+- Beim Start werden Migrationen automatisch ausgeführt (`prisma migrate deploy`).
+- `PORT` wird von Render vorgegeben; der Service nutzt bereits `process.env.PORT`.
+- `CORS_ORIGIN` in Render als Environment Variable setzen (z. B. URL deines Frontends).
+
+### 4. Build- und Start-Kommandos (aus `render.yaml`)
+
+```sh
+Build: npm ci && npm run build
+Start: npm run prisma:migrate:deploy && npm run start
+```
+
+---
+
 ## API Endpunkte
 
 ### GET `/api/business-customers`

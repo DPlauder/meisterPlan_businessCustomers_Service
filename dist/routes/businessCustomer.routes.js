@@ -41,4 +41,7 @@ const BusinessCustomerController = __importStar(require("../controllers/business
 const router = express_1.default.Router();
 router.get("/", BusinessCustomerController.getAllBusinessCustomers);
 router.post("/", BusinessCustomerController.createBusinessCustomer);
+router.get("/:id", BusinessCustomerController.getBusinessCustomerById);
+router.put("/:id", BusinessCustomerController.updateBusinessCustomer);
+router.delete("/:id", BusinessCustomerController.deleteBusinessCustomer);
 exports.default = router;
